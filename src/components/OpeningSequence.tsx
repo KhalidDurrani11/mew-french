@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { IMAGES } from '../data/restaurantData';
+import { useLanguage } from '../context/LanguageContext';
+import ImageWithFallback from './ImageWithFallback';
 
 interface OpeningSequenceProps {
   onComplete: () => void;
 }
 
 export default function OpeningSequence({ onComplete }: OpeningSequenceProps) {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Automatically complete after a short, cinematic 2.8s display
     const timer = setTimeout(() => {
       handleFinish();
     }, 2800);
@@ -39,16 +41,21 @@ export default function OpeningSequence({ onComplete }: OpeningSequenceProps) {
             initial={{ scale: 1.12, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.22 }}
             transition={{ duration: 2.2, ease: 'easeOut' }}
-            className="absolute inset-0 bg-cover bg-center pointer-events-none filter blur-[1px]"
-            style={{ backgroundImage: `url(${IMAGES.heroPizza})` }}
-          />
+            className="absolute inset-0 pointer-events-none filter blur-[1px] overflow-hidden"
+          >
+            <ImageWithFallback
+              src={IMAGES.heroPizza}
+              fallbackSrc={IMAGES.fallbacks.heroPizza}
+              fallbackSources={[IMAGES.local.heroPizza, '/images/hero_pizza.jpg']}
+              alt="La Felicità Grenoble"
+              className="w-full h-full object-cover object-center"
+            />
+          </motion.div>
 
-          {/* Grain and paper texture overlay */}
           <div className="absolute inset-0 bg-[#F8F3E9]/85 pointer-events-none" />
 
           {/* Central Editorial Sequence */}
           <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl">
-            {/* Italian Kicker */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -80,26 +87,24 @@ export default function OpeningSequence({ onComplete }: OpeningSequenceProps) {
               />
             </div>
 
-            {/* Subtitle statement */}
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.8 }}
               className="font-display italic text-lg sm:text-2xl text-[#291C17]/80"
             >
-              « Un assaggio d’Italia, cuit au feu de bois. »
+              « {t('Un assaggio d’Italia, cuit au feu de bois.', 'A taste of Italy, baked over wood fire.')} »
             </motion.p>
           </div>
 
-          {/* Skip button for zero-latency direct access */}
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.4 }}
             onClick={handleFinish}
-            className="absolute bottom-8 right-8 text-xs uppercase tracking-widest text-[#291C17]/60 hover:text-[#C83B28] transition-colors py-2 px-3 border border-[#291C17]/15 rounded-sm hover:border-[#C83B28]/50"
+            className="absolute bottom-8 right-8 text-xs uppercase tracking-widest text-[#291C17]/60 hover:text-[#C83B28] transition-colors py-2 px-3 border border-[#291C17]/15 rounded-xs hover:border-[#C83B28]/50 cursor-pointer"
           >
-            Accéder au site →
+            {t('Accéder au site →', 'Enter site →')}
           </motion.button>
         </motion.div>
       )}

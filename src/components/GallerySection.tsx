@@ -1,9 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Camera, Maximize2, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { GALLERY_ITEMS } from '../data/restaurantData';
+import { Camera, Maximize2, X, ChevronLeft, ChevronRight, Film } from 'lucide-react';
+import { GALLERY_ITEMS, IMAGES } from '../data/restaurantData';
+import { useLanguage } from '../context/LanguageContext';
+import ImageWithFallback from './ImageWithFallback';
 
-export default function GallerySection() {
+interface GallerySectionProps {
+  onOpenVideoStudio?: () => void;
+}
+
+const FALLBACK_MAP: Record<string, string> = {
+  'gal-1': IMAGES.fallbacks.heroPizza,
+  'gal-2': IMAGES.fallbacks.burrataPizza,
+  'gal-3': IMAGES.fallbacks.freshPasta,
+  'gal-4': IMAGES.fallbacks.restaurantInterior,
+  'gal-5': IMAGES.fallbacks.tiramisu,
+};
+
+export default function GallerySection({ onOpenVideoStudio }: GallerySectionProps) {
+  const { language, t } = useLanguage();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const handleNext = useCallback(() => {
@@ -35,136 +50,154 @@ export default function GallerySection() {
           <div>
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#C83B28] font-semibold mb-2">
               <Camera className="w-3.5 h-3.5" />
-              <span>Signature N° 04 · Exposition Photographique</span>
+              <span>{t('Signature N° 04 · Exposition Photographique', 'Signature No. 04 · Photographic Exhibition')}</span>
             </div>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#F8F3E9]">
-              L'Atmosphère de La Felicità
+              {t('L’Atmosphère de La Felicità', 'The Atmosphere of La Felicità')}
             </h2>
           </div>
-          <p className="mt-4 md:mt-0 text-xs uppercase tracking-widest text-[#F8F3E9]/60 font-mono">
-            34 Quai Perrière · Grenoble
-          </p>
+
+          <div className="mt-4 md:mt-0 flex items-center gap-4">
+            {onOpenVideoStudio && (
+              <button
+                type="button"
+                onClick={onOpenVideoStudio}
+                className="inline-flex items-center gap-2 px-3.5 py-2 text-xs uppercase tracking-wider font-semibold text-[#F8F3E9] bg-[#C83B28] hover:bg-[#b53220] rounded-xs transition-colors cursor-pointer shadow-xs"
+              >
+                <Film className="w-3.5 h-3.5" />
+                <span>{t('Animer en Vidéo (AI)', 'Animate with Video AI')}</span>
+              </button>
+            )}
+            <p className="text-xs uppercase tracking-widest text-[#F8F3E9]/60 font-mono">
+              34 Quai Perrière · Grenoble
+            </p>
+          </div>
         </div>
 
         {/* Asymmetrical Editorial Gallery Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
-          {/* Item 1: Large Featured Lead (Wood-Fired Pizza) */}
+          {/* Item 1 */}
           <div
             onClick={() => setLightboxIndex(0)}
-            className="md:col-span-8 group relative aspect-16/10 rounded-sm overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-2xl"
+            className="md:col-span-8 group relative aspect-16/10 rounded-xs overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-2xl"
           >
-            <img
+            <ImageWithFallback
               src={GALLERY_ITEMS[0].src}
+              fallbackSrc={FALLBACK_MAP['gal-1']}
+              fallbackSources={[IMAGES.local.heroPizza, '/images/hero_pizza.jpg']}
               alt={GALLERY_ITEMS[0].title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#291C17]/85 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
               <div>
                 <span className="text-[11px] uppercase tracking-widest text-[#C83B28] font-bold block mb-1">
-                  {GALLERY_ITEMS[0].category}
+                  {language === 'en' ? GALLERY_ITEMS[0].categoryEn : GALLERY_ITEMS[0].category}
                 </span>
                 <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#F8F3E9]">
-                  {GALLERY_ITEMS[0].title}
+                  {language === 'en' ? GALLERY_ITEMS[0].titleEn : GALLERY_ITEMS[0].title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[#F8F3E9]/80 font-light mt-1 max-w-md hidden sm:block">
-                  {GALLERY_ITEMS[0].caption}
+                  {language === 'en' ? GALLERY_ITEMS[0].captionEn : GALLERY_ITEMS[0].caption}
                 </p>
               </div>
-              <div className="p-2.5 rounded-full bg-[#F8F3E9]/20 text-white backdrop-blur-sm group-hover:bg-[#C83B28] transition-colors shrink-0">
+              <div className="p-2.5 rounded-full bg-[#F8F3E9]/20 text-white backdrop-blur-xs group-hover:bg-[#C83B28] transition-colors shrink-0">
                 <Maximize2 className="w-4 h-4" />
               </div>
             </div>
           </div>
 
-          {/* Item 2: Tall Interior Ambiance */}
+          {/* Item 2 */}
           <div
             onClick={() => setLightboxIndex(3)}
-            className="md:col-span-4 group relative aspect-3/4 rounded-sm overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-2xl"
+            className="md:col-span-4 group relative aspect-3/4 rounded-xs overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-2xl"
           >
-            <img
+            <ImageWithFallback
               src={GALLERY_ITEMS[3].src}
+              fallbackSrc={FALLBACK_MAP['gal-4']}
+              fallbackSources={[IMAGES.local.restaurantInterior, '/images/restaurant_interior.jpg']}
               alt={GALLERY_ITEMS[3].title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#291C17]/85 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-6 left-6 right-6">
               <span className="text-[11px] uppercase tracking-widest text-[#C83B28] font-bold block mb-1">
-                {GALLERY_ITEMS[3].category}
+                {language === 'en' ? GALLERY_ITEMS[3].categoryEn : GALLERY_ITEMS[3].category}
               </span>
               <h3 className="font-display text-2xl font-bold text-[#F8F3E9]">
-                {GALLERY_ITEMS[3].title}
+                {language === 'en' ? GALLERY_ITEMS[3].titleEn : GALLERY_ITEMS[3].title}
               </h3>
               <p className="text-xs text-[#F8F3E9]/80 font-light mt-1">
-                {GALLERY_ITEMS[3].caption}
+                {language === 'en' ? GALLERY_ITEMS[3].captionEn : GALLERY_ITEMS[3].caption}
               </p>
             </div>
           </div>
 
-          {/* Item 3: Handmade Tagliatelle */}
+          {/* Item 3 */}
           <div
             onClick={() => setLightboxIndex(2)}
-            className="md:col-span-4 group relative aspect-4/3 rounded-sm overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-xl"
+            className="md:col-span-4 group relative aspect-4/3 rounded-xs overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-xl"
           >
-            <img
+            <ImageWithFallback
               src={GALLERY_ITEMS[2].src}
+              fallbackSrc={FALLBACK_MAP['gal-3']}
+              fallbackSources={[IMAGES.local.freshPasta, '/images/fresh_pasta.jpg']}
               alt={GALLERY_ITEMS[2].title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#291C17]/85 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-4 left-4 right-4">
               <span className="text-[11px] uppercase tracking-widest text-[#C83B28] font-bold block">
-                {GALLERY_ITEMS[2].category}
+                {language === 'en' ? GALLERY_ITEMS[2].categoryEn : GALLERY_ITEMS[2].category}
               </span>
               <h3 className="font-display text-xl font-bold text-[#F8F3E9]">
-                {GALLERY_ITEMS[2].title}
+                {language === 'en' ? GALLERY_ITEMS[2].titleEn : GALLERY_ITEMS[2].title}
               </h3>
             </div>
           </div>
 
-          {/* Item 4: Burrata & Truffle Signature Pizza */}
+          {/* Item 4 */}
           <div
             onClick={() => setLightboxIndex(1)}
-            className="md:col-span-4 group relative aspect-4/3 rounded-sm overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-xl"
+            className="md:col-span-4 group relative aspect-4/3 rounded-xs overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-xl"
           >
-            <img
+            <ImageWithFallback
               src={GALLERY_ITEMS[1].src}
+              fallbackSrc={FALLBACK_MAP['gal-2']}
+              fallbackSources={[IMAGES.local.burrataPizza, '/images/burrata_pizza.jpg']}
               alt={GALLERY_ITEMS[1].title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#291C17]/85 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-4 left-4 right-4">
               <span className="text-[11px] uppercase tracking-widest text-[#C83B28] font-bold block">
-                {GALLERY_ITEMS[1].category}
+                {language === 'en' ? GALLERY_ITEMS[1].categoryEn : GALLERY_ITEMS[1].category}
               </span>
               <h3 className="font-display text-xl font-bold text-[#F8F3E9]">
-                {GALLERY_ITEMS[1].title}
+                {language === 'en' ? GALLERY_ITEMS[1].titleEn : GALLERY_ITEMS[1].title}
               </h3>
             </div>
           </div>
 
-          {/* Item 5: Tiramisù Signature */}
+          {/* Item 5 */}
           <div
             onClick={() => setLightboxIndex(4)}
-            className="md:col-span-4 group relative aspect-4/3 rounded-sm overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-xl"
+            className="md:col-span-4 group relative aspect-4/3 rounded-xs overflow-hidden bg-[#291C17] cursor-pointer border border-[#F8F3E9]/15 shadow-xl"
           >
-            <img
+            <ImageWithFallback
               src={GALLERY_ITEMS[4].src}
+              fallbackSrc={FALLBACK_MAP['gal-5']}
+              fallbackSources={[IMAGES.local.tiramisu, '/images/tiramisu.jpg']}
               alt={GALLERY_ITEMS[4].title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#291C17]/85 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-4 left-4 right-4">
               <span className="text-[11px] uppercase tracking-widest text-[#C83B28] font-bold block">
-                {GALLERY_ITEMS[4].category}
+                {language === 'en' ? GALLERY_ITEMS[4].categoryEn : GALLERY_ITEMS[4].category}
               </span>
               <h3 className="font-display text-xl font-bold text-[#F8F3E9]">
-                {GALLERY_ITEMS[4].title}
+                {language === 'en' ? GALLERY_ITEMS[4].titleEn : GALLERY_ITEMS[4].title}
               </h3>
             </div>
           </div>
@@ -179,17 +212,15 @@ export default function GallerySection() {
               role="dialog"
               aria-modal="true"
             >
-              {/* Close Button */}
               <button
                 onClick={() => setLightboxIndex(null)}
                 type="button"
                 className="absolute top-6 right-6 p-2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors z-50 cursor-pointer"
-                aria-label="Fermer l'exposition"
+                aria-label="Fermer"
               >
                 <X className="w-6 h-6" />
               </button>
 
-              {/* Prev Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -202,7 +233,6 @@ export default function GallerySection() {
                 <ChevronLeft className="w-6 h-6" />
               </button>
 
-              {/* Next Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -215,7 +245,6 @@ export default function GallerySection() {
                 <ChevronRight className="w-6 h-6" />
               </button>
 
-              {/* Active Image Stage */}
               <motion.div
                 key={lightboxIndex}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -225,22 +254,23 @@ export default function GallerySection() {
                 onClick={(e) => e.stopPropagation()}
                 className="max-w-5xl w-full max-h-[85vh] flex flex-col items-center"
               >
-                <div className="relative rounded-sm overflow-hidden shadow-2xl max-h-[70vh] flex items-center justify-center">
-                  <img
+                <div className="relative rounded-xs overflow-hidden shadow-2xl max-h-[70vh] flex items-center justify-center">
+                  <ImageWithFallback
                     src={GALLERY_ITEMS[lightboxIndex].src}
+                    fallbackSrc={FALLBACK_MAP[GALLERY_ITEMS[lightboxIndex].id]}
                     alt={GALLERY_ITEMS[lightboxIndex].title}
                     className="max-h-[70vh] w-auto max-w-full object-contain rounded-xs"
                   />
                 </div>
                 <div className="text-center mt-6 max-w-2xl text-white">
                   <span className="text-[11px] uppercase tracking-widest text-[#C83B28] font-bold block mb-1">
-                    {GALLERY_ITEMS[lightboxIndex].category} · {lightboxIndex + 1} / {GALLERY_ITEMS.length}
+                    {language === 'en' ? GALLERY_ITEMS[lightboxIndex].categoryEn : GALLERY_ITEMS[lightboxIndex].category} · {lightboxIndex + 1} / {GALLERY_ITEMS.length}
                   </span>
                   <h3 className="font-display text-3xl font-bold">
-                    {GALLERY_ITEMS[lightboxIndex].title}
+                    {language === 'en' ? GALLERY_ITEMS[lightboxIndex].titleEn : GALLERY_ITEMS[lightboxIndex].title}
                   </h3>
                   <p className="text-sm text-white/80 font-light mt-2">
-                    {GALLERY_ITEMS[lightboxIndex].caption}
+                    {language === 'en' ? GALLERY_ITEMS[lightboxIndex].captionEn : GALLERY_ITEMS[lightboxIndex].caption}
                   </p>
                 </div>
               </motion.div>

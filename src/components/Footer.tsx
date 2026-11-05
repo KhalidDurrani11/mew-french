@@ -1,15 +1,17 @@
 import { RESTAURANT_INFO } from '../data/restaurantData';
 import { PhoneCall, MapPin, Instagram, Globe } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FooterProps {
   onOpenReservation: () => void;
 }
 
 export default function Footer({ onOpenReservation }: FooterProps) {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-[#1f1511] text-[#F8F3E9] pt-20 pb-12 border-t border-[#F8F3E9]/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* Main Footer Row */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-[#F8F3E9]/10">
           {/* Brand Col */}
           <div className="md:col-span-5 space-y-4">
@@ -23,7 +25,10 @@ export default function Footer({ onOpenReservation }: FooterProps) {
               Ristorante Italiano & Pizza al Forno a Legna
             </p>
             <p className="text-sm text-[#F8F3E9]/75 font-light leading-relaxed max-w-sm">
-              L'amour de la gastronomie italienne traditionnelle au cœur de Grenoble. Pizzas au feu de bois, pâtes fraîches façonnées maison et produits d'origine protégée.
+              {t(
+                "L'amour de la gastronomie italienne traditionnelle au cœur de Grenoble. Pizzas au feu de bois, pâtes fraîches façonnées maison et produits d'origine protégée.",
+                "A passion for authentic Italian gastronomy in the heart of Grenoble. Wood-fired pizzas, handmade pasta, and protected origin ingredients."
+              )}
             </p>
 
             <div className="pt-2 flex items-center gap-4">
@@ -55,19 +60,29 @@ export default function Footer({ onOpenReservation }: FooterProps) {
             </span>
             <ul className="space-y-2 text-sm text-[#F8F3E9]/80 font-light">
               <li>
-                <a href="#histoire" className="hover:text-[#C83B28] transition-colors">Notre Histoire</a>
+                <a href="#histoire" className="hover:text-[#C83B28] transition-colors">
+                  {t('Notre Histoire', 'Our Story')}
+                </a>
               </li>
               <li>
-                <a href="#carte" className="hover:text-[#C83B28] transition-colors">La Carte & Pizzas</a>
+                <a href="#carte" className="hover:text-[#C83B28] transition-colors">
+                  {t('La Carte & Pizzas', 'The Menu & Pizzas')}
+                </a>
               </li>
               <li>
-                <a href="#pizza-reveal" className="hover:text-[#C83B28] transition-colors">L’Artisanat du Feu</a>
+                <a href="#pizza-reveal" className="hover:text-[#C83B28] transition-colors">
+                  {t('L’Artisanat du Feu', 'The Craft of Fire')}
+                </a>
               </li>
               <li>
-                <a href="#ingredients" className="hover:text-[#C83B28] transition-colors">Ingrédients DOP</a>
+                <a href="#ingredients" className="hover:text-[#C83B28] transition-colors">
+                  {t('Ingrédients DOP', 'DOP Ingredients')}
+                </a>
               </li>
               <li>
-                <a href="#galerie" className="hover:text-[#C83B28] transition-colors">Galerie Photo</a>
+                <a href="#galerie" className="hover:text-[#C83B28] transition-colors">
+                  {t('Galerie Photo', 'Photo Gallery')}
+                </a>
               </li>
               <li>
                 <button
@@ -75,7 +90,7 @@ export default function Footer({ onOpenReservation }: FooterProps) {
                   type="button"
                   className="hover:text-[#C83B28] transition-colors text-left cursor-pointer"
                 >
-                  Réserver une Table
+                  {t('Réserver une Table', 'Book a Table')}
                 </button>
               </li>
             </ul>
@@ -84,7 +99,7 @@ export default function Footer({ onOpenReservation }: FooterProps) {
           {/* Contact Col */}
           <div className="md:col-span-4 space-y-4">
             <span className="text-xs uppercase tracking-widest text-[#F8F3E9]/50 font-mono block mb-2">
-              Adresse & Réservations
+              {t('Adresse & Réservations', 'Address & Bookings')}
             </span>
             <div className="space-y-2.5 text-xs text-[#F8F3E9]/80">
               <div className="flex items-start gap-2.5">
@@ -92,7 +107,7 @@ export default function Footer({ onOpenReservation }: FooterProps) {
                 <span>
                   34 Quai Perrière, 38000 Grenoble, France
                   <br />
-                  <span className="text-[#F8F3E9]/50">Au bord de l’Isère, quartier Saint-Laurent</span>
+                  <span className="text-[#F8F3E9]/50">{t('Au bord de l’Isère, quartier Saint-Laurent', 'On the banks of the Isère, Saint-Laurent district')}</span>
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
@@ -112,17 +127,16 @@ export default function Footer({ onOpenReservation }: FooterProps) {
                 type="button"
                 className="w-full py-3 text-xs uppercase tracking-widest font-semibold text-[#F8F3E9] bg-[#C83B28] hover:bg-[#a92c1b] rounded-xs transition-colors cursor-pointer"
               >
-                Réserver en Ligne
+                {t('Réserver en Ligne', 'Book Online')}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Bottom copyright and Italian proverbs */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#F8F3E9]/50">
-          <p>© {new Date().getFullYear()} La Felicità Grenoble. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} La Felicità Grenoble. {t('Tous droits réservés.', 'All rights reserved.')}</p>
           <p className="font-display italic text-sm text-[#F8F3E9]/70">
-            « A tavola non si invecchia. » — À table, on ne vieillit jamais.
+            « A tavola non si invecchia. » — {t('À table, on ne vieillit jamais.', 'At the table with good food, one never grows old.')}
           </p>
         </div>
       </div>
