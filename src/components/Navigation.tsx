@@ -44,14 +44,14 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
             : 'bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#291C17]/10 py-2.5 sm:py-3.5 shadow-xs'
         }`}
       >
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4">
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
 
           {/* Brand Wordmark */}
           <a href="#" className="flex flex-col group shrink-0">
-            <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#291C17] group-hover:text-[#C83B28] transition-colors leading-none">
+            <span className="font-display text-lg sm:text-2xl font-bold tracking-tight text-[#291C17] group-hover:text-[#C83B28] transition-colors leading-none">
               LA FELICITÀ
             </span>
-            <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-[#C83B28] font-semibold mt-0.5">
+            <span className="text-[7.5px] sm:text-[9px] tracking-[0.18em] uppercase text-[#C83B28] font-semibold mt-0.5">
               {t('Ristorante & Pizzeria', 'Ristorante & Pizzeria')}
             </span>
           </a>
@@ -82,8 +82,8 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
             )}
           </nav>
 
-          {/* Right-side Actions — generous breathing room & balanced spacing */}
-          <div className="flex items-center gap-2.5 sm:gap-3.5 lg:gap-4 shrink-0">
+          {/* Right-side Actions — generous breathing room on desktop, mobile-safe without clipping */}
+          <div className="flex items-center gap-2 sm:gap-3.5 lg:gap-4 shrink-0">
 
             {/* Language Switcher */}
             <div
@@ -94,7 +94,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               <button
                 type="button"
                 onClick={() => setLanguage('fr')}
-                className={`px-2.5 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
                   language === 'fr'
                     ? 'bg-[#291C17] text-[#F8F3E9]'
                     : 'text-[#291C17]/60 hover:text-[#291C17]'
@@ -105,7 +105,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               <button
                 type="button"
                 onClick={() => setLanguage('en')}
-                className={`px-2.5 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
                   language === 'en'
                     ? 'bg-[#291C17] text-[#F8F3E9]'
                     : 'text-[#291C17]/60 hover:text-[#291C17]'
@@ -115,7 +115,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               </button>
             </div>
 
-            {/* Open Menu CTA — opens interactive menu modal */}
+            {/* Open Menu CTA — opens interactive menu modal (desktop/tablet) */}
             <button
               onClick={onOpenMenu}
               type="button"
@@ -151,23 +151,24 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               )}
             </button>
 
-            {/* Book Table CTA — generous margin and padding, no clipping */}
+            {/* Book Table CTA — responsive compact label on mobile, full label on desktop */}
             <button
               onClick={onOpenReservation}
               type="button"
-              className="px-4.5 sm:px-5 py-2 text-xs uppercase tracking-wider font-bold text-white bg-[#C83B28] hover:bg-[#b53220] rounded-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0 ml-1"
+              className="px-2.5 sm:px-5 py-1.5 sm:py-2 text-[11px] sm:text-xs uppercase tracking-wider font-bold text-white bg-[#C83B28] hover:bg-[#b53220] rounded-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0"
             >
-              {t('Réserver une table', 'Book a Table')}
+              <span className="inline sm:hidden">{t('Réserver', 'Book')}</span>
+              <span className="hidden sm:inline">{t('Réserver une table', 'Book a Table')}</span>
             </button>
 
-            {/* Mobile burger button */}
+            {/* Mobile burger menu button — ALWAYS visible, guaranteed never pushed off-screen */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               type="button"
-              className="lg:hidden p-1.5 text-[#291C17] hover:text-[#C83B28] transition-colors cursor-pointer shrink-0 ml-1"
+              className="lg:hidden p-1.5 sm:p-2 text-[#291C17] hover:text-[#C83B28] transition-colors cursor-pointer shrink-0"
               aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
