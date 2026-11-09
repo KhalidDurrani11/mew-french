@@ -14,19 +14,19 @@ import IngredientsExperience from './components/IngredientsExperience';
 import StorySection from './components/StorySection';
 import MenuSection from './components/MenuSection';
 import GallerySection from './components/GallerySection';
+import TestimonialsSection from './components/TestimonialsSection';
 import ReservationSection from './components/ReservationSection';
 import Footer from './components/Footer';
 import ReservationModal from './components/ReservationModal';
 import MenuModal from './components/MenuModal';
-import AnimateVideoModal from './components/AnimateVideoModal';
-import { UtensilsCrossed } from 'lucide-react';
+import { UtensilsCrossed, PhoneCall, Calendar, MapPin } from 'lucide-react';
+import { RESTAURANT_INFO } from './data/restaurantData';
 
 function AppContent() {
   const { t } = useLanguage();
   const [hasCompletedOpening, setHasCompletedOpening] = useState(false);
   const [isReservationOpen, setIsReservationOpen] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
-  const [isVideoStudioOpen, setIsVideoStudioOpen] = useState(false);
   const [selectedDishForReservation, setSelectedDishForReservation] = useState<string | undefined>(undefined);
 
   const handleOpenReservation = (dishName?: string) => {
@@ -38,13 +38,9 @@ function AppContent() {
     setIsMenuModalOpen(true);
   };
 
-  const handleOpenVideoStudio = () => {
-    setIsVideoStudioOpen(true);
-  };
-
   return (
-    <div className="min-h-screen bg-[#F8F3E9] text-[#291C17] font-body selection:bg-[#C83B28] selection:text-[#F8F3E9] relative">
-      {/* Slim, elegant tomato red scroll progress indicator */}
+    <div className="min-h-screen bg-[#F8F3E9] text-[#291C17] font-body selection:bg-[#C83B28] selection:text-[#F8F3E9] relative pb-16 md:pb-0">
+      {/* Elegant scroll progress indicator */}
       <ScrollProgress />
 
       {/* Cinematic Opening Sequence */}
@@ -52,16 +48,15 @@ function AppContent() {
         <OpeningSequence onComplete={() => setHasCompletedOpening(true)} />
       )}
 
-      {/* Primary Top Bar with Subtle Language Toggle & Separate Menu Button */}
+      {/* Top Header Bar */}
       <Navigation
         onOpenReservation={() => handleOpenReservation()}
         onOpenMenu={handleOpenMenu}
-        onOpenVideoStudio={handleOpenVideoStudio}
       />
 
       {/* Main Experience Flow */}
       <main>
-        {/* Cinematic Hero with separate Open Menu CTA */}
+        {/* Cinematic Hero */}
         <HeroSection
           onOpenReservation={() => handleOpenReservation()}
           onOpenMenu={handleOpenMenu}
@@ -76,21 +71,24 @@ function AppContent() {
         {/* WOW Moment 2: The Ingredients Experience (Terroirs DOP) */}
         <IngredientsExperience />
 
-        {/* WOW Moment 3: The Menu Experience & Interactive Transformation */}
+        {/* WOW Moment 3: The Menu Experience & Interactive Dish Explorer */}
         <MenuSection
-          onOpenReservation={() => handleOpenReservation()}
+          onOpenReservation={(dish) => handleOpenReservation(dish)}
           onOpenMenu={handleOpenMenu}
         />
 
-        {/* WOW Moment 4: Immersive Editorial Gallery & Lightbox */}
-        <GallerySection onOpenVideoStudio={handleOpenVideoStudio} />
+        {/* WOW Moment 4: Immersive Photography Gallery & Lightbox */}
+        <GallerySection />
 
-        {/* WOW Moment 5: Evening Arrival, Contact & Reservations */}
+        {/* Guest Reviews */}
+        <TestimonialsSection />
+
+        {/* WOW Moment 5: Evening Arrival, Contact, Map & Bookings */}
         <ReservationSection onOpenReservation={() => handleOpenReservation()} />
       </main>
 
-      {/* Floating Quick Action Menu Pill on screen bottom-right */}
-      <div className="fixed bottom-6 right-6 z-30">
+      {/* Floating Quick Action Menu Pill on Desktop */}
+      <div className="hidden md:block fixed bottom-6 right-6 z-30">
         <button
           onClick={handleOpenMenu}
           type="button"
@@ -106,10 +104,49 @@ function AppContent() {
         </button>
       </div>
 
+      {/* Sticky Bottom Action Bar for Mobile Devices (High conversion agency pattern) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#1F1511]/95 backdrop-blur-md border-t border-[#F8F3E9]/15 px-3 py-2 flex items-center justify-around shadow-2xl">
+        <a
+          href={`tel:${RESTAURANT_INFO.phone}`}
+          className="flex flex-col items-center gap-0.5 text-[#F8F3E9] text-[10px] font-medium p-1 hover:text-[#C83B28] transition-colors"
+        >
+          <PhoneCall className="w-4 h-4 text-[#C83B28]" />
+          <span>{t('Appeler', 'Call')}</span>
+        </a>
+
+        <button
+          onClick={handleOpenMenu}
+          type="button"
+          className="flex flex-col items-center gap-0.5 text-[#F8F3E9] text-[10px] font-medium p-1 hover:text-[#C83B28] transition-colors cursor-pointer"
+        >
+          <UtensilsCrossed className="w-4 h-4 text-[#C83B28]" />
+          <span>{t('La Carte', 'Menu')}</span>
+        </button>
+
+        <button
+          onClick={() => handleOpenReservation()}
+          type="button"
+          className="flex items-center gap-1.5 px-4 py-2 bg-[#C83B28] text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md active:scale-95 transition-transform"
+        >
+          <Calendar className="w-3.5 h-3.5" />
+          <span>{t('Réserver', 'Book')}</span>
+        </button>
+
+        <a
+          href={RESTAURANT_INFO.googleMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center gap-0.5 text-[#F8F3E9] text-[10px] font-medium p-1 hover:text-[#C83B28] transition-colors"
+        >
+          <MapPin className="w-4 h-4 text-[#C83B28]" />
+          <span>{t('Accès', 'Maps')}</span>
+        </a>
+      </div>
+
       {/* Footer */}
       <Footer onOpenReservation={() => handleOpenReservation()} />
 
-      {/* Separate Dedicated Menu Modal: Opens when ANY menu button is clicked */}
+      {/* Dedicated Full Screen Menu Modal */}
       <MenuModal
         isOpen={isMenuModalOpen}
         onClose={() => setIsMenuModalOpen(false)}
@@ -118,7 +155,7 @@ function AppContent() {
         }}
       />
 
-      {/* Global Interactive Reservation Modal */}
+      {/* Interactive Reservation Modal */}
       <ReservationModal
         isOpen={isReservationOpen}
         onClose={() => {
@@ -126,12 +163,6 @@ function AppContent() {
           setSelectedDishForReservation(undefined);
         }}
         initialDishNote={selectedDishForReservation}
-      />
-
-      {/* Gemini Omni Flash Video Generation Studio */}
-      <AnimateVideoModal
-        isOpen={isVideoStudioOpen}
-        onClose={() => setIsVideoStudioOpen(false)}
       />
     </div>
   );

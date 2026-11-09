@@ -2,5 +2,5 @@
   "name": "La Felicità Grenoble — Restaurant Italien d'Exception",
   "description": "Restaurant italien authentique et pizzeria au feu de bois au 34 Quai Perrière à Grenoble. Cuisine maison, pâtes fraîches et produits d'Italie.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }

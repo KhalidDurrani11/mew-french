@@ -1,5 +1,6 @@
 import { RESTAURANT_INFO } from '../data/restaurantData';
-import { PhoneCall, MapPin, Instagram, Globe } from 'lucide-react';
+import { PhoneCall, MapPin, Instagram } from 'lucide-react';
+// Globe / eatbu icon removed per client request
 import { useLanguage } from '../context/LanguageContext';
 
 interface FooterProps {
@@ -40,15 +41,6 @@ export default function Footer({ onOpenReservation }: FooterProps) {
                 aria-label="Instagram de La Felicità Grenoble"
               >
                 <Instagram className="w-4 h-4" />
-              </a>
-              <a
-                href={RESTAURANT_INFO.eatbuUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-full bg-white/5 hover:bg-[#C83B28] text-white transition-colors"
-                aria-label="Site web officiel Eatbu"
-              >
-                <Globe className="w-4 h-4" />
               </a>
             </div>
           </div>
@@ -125,7 +117,7 @@ export default function Footer({ onOpenReservation }: FooterProps) {
               <button
                 onClick={onOpenReservation}
                 type="button"
-                className="w-full py-3 text-xs uppercase tracking-widest font-semibold text-[#F8F3E9] bg-[#C83B28] hover:bg-[#a92c1b] rounded-xs transition-colors cursor-pointer"
+                className="w-full py-3.5 text-xs uppercase tracking-widest font-bold text-[#F8F3E9] bg-[#C83B28] hover:bg-[#b53220] rounded-full transition-all duration-200 shadow-md cursor-pointer active:scale-95"
               >
                 {t('Réserver en Ligne', 'Book Online')}
               </button>

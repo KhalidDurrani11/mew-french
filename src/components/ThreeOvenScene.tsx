@@ -402,16 +402,16 @@ export default function ThreeOvenScene() {
   }, []);
 
   return (
-    <div className="relative w-full h-[520px] lg:h-[600px] rounded-sm overflow-hidden bg-[#18110e] border border-[#291C17]/30 shadow-2xl">
+    <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden bg-[#18110e] border border-[#291C17]/30 shadow-2xl">
       {/* 3D WebGL Canvas Mount Container */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Top Spec / Title Badge */}
-      <div className="absolute top-4 left-4 z-10 bg-[#18110e]/85 text-[#F8F3E9] px-3.5 py-2 rounded-xs border border-[#F8F3E9]/15 shadow-lg pointer-events-none">
+      <div className="absolute top-3 left-3 right-3 sm:right-auto sm:max-w-md z-10 bg-[#18110e]/90 backdrop-blur-md text-[#F8F3E9] px-3.5 py-2.5 rounded-xl border border-[#F8F3E9]/15 shadow-lg pointer-events-none">
         <div className="flex items-center gap-2">
           <Flame className="w-3.5 h-3.5 text-[#C83B28]" />
           <span className="text-[11px] uppercase tracking-widest font-semibold text-[#F8F3E9]">
-            {t('Modèle 3D Interactif · Four à Bois de Pierre', 'Interactive 3D Model · Stone Wood-Fired Oven')}
+            {t('Modèle 3D Interactif · Four à Bois', 'Interactive 3D Model · Wood Oven')}
           </span>
         </div>
         <p className="text-[10px] text-[#F8F3E9]/60 font-light mt-0.5">
@@ -419,14 +419,14 @@ export default function ThreeOvenScene() {
         </p>
       </div>
 
-      {/* Unified Bottom Control Dock (<= 15% Viewport footprint) */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-[92%] max-w-xl">
+      {/* Unified Bottom Control Dock */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 w-[94%] max-w-xl">
         {/* Collapse / Expand Toggle */}
         <div className="flex justify-center -mb-px">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             type="button"
-            className="flex items-center gap-1.5 px-3 py-1 bg-[#1f1511] text-[#F8F3E9]/80 hover:text-white text-[11px] font-medium uppercase tracking-wider rounded-t-xs border-t border-x border-[#F8F3E9]/15 shadow-md cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1 bg-[#1f1511] text-[#F8F3E9]/80 hover:text-white text-[11px] font-medium uppercase tracking-wider rounded-t-lg border-t border-x border-[#F8F3E9]/15 shadow-md cursor-pointer transition-colors"
           >
             {isCollapsed ? (
               <>
@@ -444,7 +444,7 @@ export default function ThreeOvenScene() {
 
         {/* Dock Surface */}
         {!isCollapsed && (
-          <div className="bg-[#1f1511]/95 text-[#F8F3E9] p-3 rounded-b-xs rounded-t-none border border-[#F8F3E9]/15 shadow-2xl flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="bg-[#1f1511]/95 backdrop-blur-md text-[#F8F3E9] p-3 rounded-b-xl rounded-t-none border border-[#F8F3E9]/15 shadow-2xl flex flex-wrap items-center justify-between gap-2.5 text-xs">
             {/* Camera Views */}
             <div className="flex items-center gap-1">
               <span className="text-[10px] uppercase tracking-wider text-[#F8F3E9]/50 mr-1 hidden sm:inline">

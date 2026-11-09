@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Menu, X, PhoneCall, Film, UtensilsCrossed } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, PhoneCall, UtensilsCrossed } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/restaurantData';
 import { soundEngine } from '../utils/audioAtmosphere';
 import { useLanguage } from '../context/LanguageContext';
@@ -7,19 +7,16 @@ import { useLanguage } from '../context/LanguageContext';
 interface NavigationProps {
   onOpenReservation: () => void;
   onOpenMenu: () => void;
-  onOpenVideoStudio?: () => void;
 }
 
-export default function Navigation({ onOpenReservation, onOpenMenu, onOpenVideoStudio }: NavigationProps) {
+export default function Navigation({ onOpenReservation, onOpenMenu }: NavigationProps) {
   const { language, setLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,10 +27,12 @@ export default function Navigation({ onOpenReservation, onOpenMenu, onOpenVideoS
   };
 
   const navLinks = [
-    { label: t('Notre Histoire', 'Our Story'), href: '#histoire' },
-    { label: t('Ingrédients DOP', 'DOP Ingredients'), href: '#ingredients' },
+    { label: t('Menu', 'Menu'), onClick: onOpenMenu },
+    { label: t('Four à Bois', 'Wood Oven'), href: '#pizza-reveal' },
+    { label: t('Histoire', 'Story'), href: '#histoire' },
+    { label: t('Ingrédients', 'Ingredients'), href: '#ingredients' },
     { label: t('Galerie', 'Gallery'), href: '#galerie' },
-    { label: t('Accès & Horaires', 'Access & Hours'), href: '#contact' },
+    { label: t('Horaires', 'Hours'), href: '#contact' },
   ];
 
   return (
@@ -41,249 +40,220 @@ export default function Navigation({ onOpenReservation, onOpenMenu, onOpenVideoS
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'bg-[#F8F3E9]/95 backdrop-blur-md border-b border-[#291C17]/10 py-3 shadow-xs'
-            : 'bg-transparent py-5'
+            ? 'bg-[#FAF6F0]/98 backdrop-blur-md border-b border-[#291C17]/10 py-2 sm:py-2.5 shadow-sm'
+            : 'bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#291C17]/10 py-2.5 sm:py-3.5 shadow-xs'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6">
-          {/* Zone 1: Brand Wordmark */}
-          <a
-            href="#"
-            className="font-display text-2xl lg:text-3xl font-bold tracking-tight text-[#291C17] hover:text-[#C83B28] transition-colors whitespace-nowrap shrink-0"
-          >
-            LA FELICITÀ
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4">
+
+          {/* Brand Wordmark */}
+          <a href="#" className="flex flex-col group shrink-0">
+            <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#291C17] group-hover:text-[#C83B28] transition-colors leading-none">
+              LA FELICITÀ
+            </span>
+            <span className="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase text-[#C83B28] font-semibold mt-0.5">
+              {t('Ristorante & Pizzeria', 'Ristorante & Pizzeria')}
+            </span>
           </a>
 
-          {/* Zone 2: Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-[#291C17]/80">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="hover:text-[#C83B28] transition-colors whitespace-nowrap shrink-0 relative group py-1"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#C83B28] transition-all duration-200 group-hover:w-full" />
-              </a>
-            ))}
+          {/* Desktop Nav Links — visible on all desktop / laptop screens */}
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs xl:text-[13px] font-medium text-[#291C17]/80 justify-center">
+            {navLinks.map((link) =>
+              link.onClick ? (
+                <button
+                  key={link.label}
+                  onClick={link.onClick}
+                  type="button"
+                  className="hover:text-[#C83B28] transition-colors whitespace-nowrap cursor-pointer relative group/nl py-1"
+                >
+                  {link.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#C83B28] transition-all duration-200 group-hover/nl:w-full" />
+                </button>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="hover:text-[#C83B28] transition-colors whitespace-nowrap relative group/nl py-1"
+                >
+                  {link.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#C83B28] transition-all duration-200 group-hover/nl:w-full" />
+                </a>
+              )
+            )}
           </nav>
 
-          {/* Zone 3: Actions (Language Toggle, SEPARATE MENU BUTTON, Audio, Reservation CTA) */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            {/* Subtle Language Toggle (FR | EN) */}
+          {/* Right-side Actions — perfectly balanced, guaranteed no overflow */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+
+            {/* Language Switcher */}
             <div
-              className="flex items-center p-0.5 bg-[#291C17]/5 border border-[#291C17]/15 rounded-xs"
+              className="flex items-center p-0.5 bg-[#291C17]/6 border border-[#291C17]/12 rounded-sm shrink-0"
               role="group"
               aria-label="Language selection"
             >
               <button
                 type="button"
                 onClick={() => setLanguage('fr')}
-                className={`px-2 py-1 text-[11px] font-semibold tracking-wider transition-colors rounded-xs cursor-pointer ${
+                className={`px-2 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
                   language === 'fr'
-                    ? 'bg-[#291C17] text-[#F8F3E9] shadow-xs'
+                    ? 'bg-[#291C17] text-[#F8F3E9]'
                     : 'text-[#291C17]/60 hover:text-[#291C17]'
                 }`}
-                title="Passer en Français"
               >
                 FR
               </button>
               <button
                 type="button"
                 onClick={() => setLanguage('en')}
-                className={`px-2 py-1 text-[11px] font-semibold tracking-wider transition-colors rounded-xs cursor-pointer ${
+                className={`px-2 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
                   language === 'en'
-                    ? 'bg-[#291C17] text-[#F8F3E9] shadow-xs'
+                    ? 'bg-[#291C17] text-[#F8F3E9]'
                     : 'text-[#291C17]/60 hover:text-[#291C17]'
                 }`}
-                title="Switch to English"
               >
                 EN
               </button>
             </div>
 
-            {/* SEPARATE MENU BUTTON: Direct Click Opens the Menu Modal */}
+            {/* Open Menu CTA — opens interactive menu modal */}
             <button
               onClick={onOpenMenu}
               type="button"
-              className="flex items-center gap-2 px-3.5 py-2 text-xs uppercase tracking-wider font-bold text-[#291C17] bg-[#F8F3E9] hover:bg-white border-2 border-[#C83B28]/40 hover:border-[#C83B28] rounded-xs transition-all shadow-xs hover:shadow-md cursor-pointer active:scale-95 group relative"
-              title={t('Ouvrir la carte complète du restaurant', 'Open full restaurant menu')}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs uppercase tracking-wider font-bold text-[#291C17] bg-white hover:bg-[#FAF6F0] border border-[#C83B28]/35 hover:border-[#C83B28] rounded-sm transition-all shadow-xs hover:shadow-sm cursor-pointer active:scale-95 group/mb shrink-0"
+              title={t('Consulter la carte complète', 'Open full menu')}
             >
-              <UtensilsCrossed className="w-3.5 h-3.5 text-[#C83B28] group-hover:rotate-12 transition-transform" />
-              <span>{t('Menu & Carte', 'Food Menu')}</span>
+              <UtensilsCrossed className="w-3.5 h-3.5 text-[#C83B28] group-hover/mb:rotate-12 transition-transform" />
+              <span>{t('Menu', 'Menu')}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#C83B28] animate-pulse" />
             </button>
 
-            {/* Video Studio Button */}
-            {onOpenVideoStudio && (
-              <button
-                type="button"
-                onClick={onOpenVideoStudio}
-                title={t('Animer une photo en vidéo', 'Animate photo into video')}
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-2 text-xs font-medium text-[#291C17]/70 hover:text-[#291C17] bg-[#291C17]/5 hover:bg-[#291C17]/10 rounded-xs transition-colors cursor-pointer"
-              >
-                <Film className="w-3.5 h-3.5 text-[#C83B28]" />
-                <span className="text-[11px] uppercase tracking-wider font-semibold">Studio</span>
-              </button>
-            )}
-
-            {/* Audio Atmosphere Toggle */}
+            {/* Historic Italian Soundscape Toggle */}
             <button
               onClick={toggleSound}
               type="button"
-              title={isAudioActive ? t('Désactiver le son du four', 'Mute hearth sound') : t('Activer l’ambiance sonore', 'Enable soundscape')}
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-2 text-xs font-medium text-[#291C17]/70 hover:text-[#291C17] bg-[#291C17]/5 hover:bg-[#291C17]/10 rounded-xs transition-colors cursor-pointer"
+              title={isAudioActive ? t('Couper la musique italienne', 'Mute Italian melody') : t('Écouter l’ambiance d’époque italienne', 'Play historic Italian music')}
+              className={`hidden md:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-sm transition-all cursor-pointer uppercase tracking-wider shrink-0 ${
+                isAudioActive
+                  ? 'bg-[#C83B28] text-white shadow-xs'
+                  : 'text-[#291C17]/70 hover:text-[#291C17] bg-[#291C17]/5 hover:bg-[#291C17]/10'
+              }`}
             >
               {isAudioActive ? (
                 <>
-                  <Volume2 className="w-3.5 h-3.5 text-[#C83B28]" />
-                  <span className="text-[11px] uppercase tracking-wider font-semibold text-[#C83B28]">
-                    {t('Ambiance', 'Sound On')}
-                  </span>
+                  <Volume2 className="w-3.5 h-3.5 animate-pulse text-white" />
+                  <span className="hidden xl:inline">{t('Son ON', 'Sound ON')}</span>
                 </>
               ) : (
                 <>
                   <VolumeX className="w-3.5 h-3.5" />
-                  <span className="text-[11px] uppercase tracking-wider">
-                    {t('Son Off', 'Sound Off')}
-                  </span>
+                  <span className="hidden xl:inline">{t('Son OFF', 'Sound OFF')}</span>
                 </>
               )}
             </button>
 
-            {/* Direct Phone Call */}
-            <a
-              href={`tel:${RESTAURANT_INFO.phone}`}
-              className="hidden md:inline-flex items-center gap-1.5 text-xs text-[#291C17]/80 hover:text-[#C83B28] px-2.5 py-2 rounded-xs transition-colors border border-[#291C17]/15 whitespace-nowrap"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-[#C83B28]" />
-              <span className="tabular-nums font-medium">{RESTAURANT_INFO.phoneDisplay}</span>
-            </a>
-
-            {/* Primary Action Button */}
+            {/* Book Table CTA — guaranteed completely visible without clipping */}
             <button
               onClick={onOpenReservation}
               type="button"
-              className="px-4 lg:px-5 py-2 text-xs uppercase tracking-wider font-semibold text-[#F8F3E9] bg-[#C83B28] hover:bg-[#a92c1b] rounded-xs transition-colors shadow-xs whitespace-nowrap cursor-pointer active:scale-[0.98]"
+              className="px-4 sm:px-5 py-2 text-xs uppercase tracking-wider font-bold text-white bg-[#C83B28] hover:bg-[#b53220] rounded-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0"
             >
-              {t('Réserver', 'Book Table')}
+              {t('Réserver une table', 'Book a Table')}
             </button>
 
-            {/* Mobile Menu Trigger */}
+            {/* Mobile burger button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               type="button"
-              className="lg:hidden p-2 text-[#291C17] hover:text-[#C83B28] transition-colors cursor-pointer"
-              aria-label="Menu principal"
+              className="lg:hidden p-1.5 text-[#291C17] hover:text-[#C83B28] transition-colors cursor-pointer shrink-0"
+              aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Full-Screen Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-30 lg:hidden bg-[#F8F3E9] pt-24 px-8 pb-12 flex flex-col justify-between overflow-y-auto">
-          <div className="flex flex-col gap-6 text-left">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-[0.25em] text-[#343A25] font-semibold">
-                Navigation
+        <div className="fixed inset-0 z-30 lg:hidden bg-[#FAF6F0] pt-20 pb-8 px-6 overflow-y-auto flex flex-col justify-between">
+          <div className="space-y-5">
+            <div className="pb-4 border-b border-[#291C17]/10">
+              <span className="text-xs uppercase tracking-widest text-[#C83B28] font-bold block mb-0.5">
+                La Felicità Grenoble
               </span>
-              {/* Language toggle inside mobile menu */}
-              <div className="flex items-center p-0.5 bg-[#291C17]/10 rounded-xs">
-                <button
-                  type="button"
-                  onClick={() => setLanguage('fr')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-xs transition-colors ${
-                    language === 'fr' ? 'bg-[#291C17] text-white' : 'text-[#291C17]/60'
-                  }`}
-                >
-                  FR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-xs transition-colors ${
-                    language === 'en' ? 'bg-[#291C17] text-white' : 'text-[#291C17]/60'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
+              <p className="text-xs text-[#291C17]/60">
+                34 Quai Perrière · {t('Au pied de la Bastille', 'By the Bastille')}
+              </p>
             </div>
 
-            {/* Separate Menu Trigger in Mobile Menu */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                onOpenMenu();
-              }}
-              className="flex items-center justify-between py-3 px-4 bg-[#291C17] text-white rounded-xs shadow-md font-display text-2xl"
-            >
-              <span className="flex items-center gap-2">
-                <UtensilsCrossed className="w-5 h-5 text-[#C83B28]" />
-                {t('Ouvrir la Carte des Plats', 'Open Food Menu')}
-              </span>
-              <span className="text-xs font-sans uppercase tracking-widest text-[#C83B28]">→</span>
-            </button>
-
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="font-display text-3xl font-medium text-[#291C17] hover:text-[#C83B28] transition-colors py-1"
-              >
-                {link.label}
-              </a>
-            ))}
-
-            {onOpenVideoStudio && (
+            <nav className="flex flex-col space-y-1">
               <button
+                onClick={() => { setIsMobileMenuOpen(false); onOpenMenu(); }}
                 type="button"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onOpenVideoStudio();
-                }}
-                className="flex items-center gap-2 text-left font-display text-2xl font-medium text-[#C83B28] py-1"
+                className="flex items-center justify-between py-3.5 px-4 rounded-xl bg-[#C83B28]/8 text-[#C83B28] font-bold font-display text-lg border border-[#C83B28]/15"
               >
-                <Film className="w-5 h-5" />
-                <span>{t('Animer une photo en vidéo', 'Animate photo into video')}</span>
+                <span>{t('Consulter la Carte Complète', 'Full Food & Wine Menu')}</span>
+                <UtensilsCrossed className="w-5 h-5" />
               </button>
-            )}
+
+              <a
+                href="/menu.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-between py-3 px-4 rounded-xl text-[#291C17]/75 font-display text-base hover:text-[#C83B28] hover:bg-[#1A1412]/3 transition-colors"
+              >
+                <span>{t('Menu PDF Officiel', 'Official PDF Menu')}</span>
+                <span className="text-xs font-mono font-bold text-[#C83B28] border border-[#C83B28]/30 px-2 py-0.5 rounded">PDF</span>
+              </a>
+
+              {/* Mobile Soundscape Toggle */}
+              <button
+                onClick={toggleSound}
+                type="button"
+                className={`flex items-center justify-between py-3 px-4 rounded-xl font-display text-base border transition-colors cursor-pointer ${
+                  isAudioActive
+                    ? 'bg-[#C83B28] text-white border-[#C83B28] shadow-sm'
+                    : 'text-[#291C17]/75 border-[#291C17]/8 hover:bg-[#1A1412]/3'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  {isAudioActive ? <Volume2 className="w-4 h-4 animate-pulse" /> : <VolumeX className="w-4 h-4" />}
+                  <span>{isAudioActive ? t('Musique Italienne Active', 'Italian Music Playing') : t('Ambiance Musicale Italienne', 'Historic Italian Melody')}</span>
+                </div>
+                <span className="text-xs uppercase tracking-widest font-mono font-bold">
+                  {isAudioActive ? 'ON' : 'OFF'}
+                </span>
+              </button>
+
+              {navLinks.slice(1).map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="py-3 px-4 rounded-xl font-display text-base text-[#291C17]/75 hover:text-[#C83B28] hover:bg-[#1A1412]/3 transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
           </div>
 
-          <div className="flex flex-col gap-3 pt-6 border-t border-[#291C17]/10">
+          <div className="pt-6 border-t border-[#291C17]/10 space-y-3">
             <button
-              onClick={toggleSound}
+              onClick={() => { setIsMobileMenuOpen(false); onOpenReservation(); }}
               type="button"
-              className="flex items-center justify-center gap-2 py-2.5 text-xs uppercase tracking-wider font-medium text-[#291C17] border border-[#291C17]/20 rounded-xs"
+              className="w-full py-4 text-center text-sm uppercase tracking-widest font-bold text-white bg-[#C83B28] rounded-xl shadow-lg"
             >
-              {isAudioActive ? <Volume2 className="w-4 h-4 text-[#C83B28]" /> : <VolumeX className="w-4 h-4" />}
-              {isAudioActive ? t('Désactiver l’ambiance', 'Mute soundscape') : t('Activer l’ambiance du four', 'Enable hearth sound')}
+              {t('Réserver une Table', 'Book a Table')}
             </button>
             <a
               href={`tel:${RESTAURANT_INFO.phone}`}
-              className="flex items-center justify-center gap-2 py-2.5 text-xs uppercase tracking-wider font-medium text-[#291C17] border border-[#291C17]/20 rounded-xs"
+              className="flex items-center justify-center gap-2 w-full py-3.5 text-sm uppercase tracking-wider font-semibold text-[#291C17] bg-[#291C17]/5 border border-[#291C17]/12 rounded-xl"
             >
               <PhoneCall className="w-4 h-4 text-[#C83B28]" />
-              {t('Appeler le', 'Call')} {RESTAURANT_INFO.phoneDisplay}
+              <span>{RESTAURANT_INFO.phoneDisplay}</span>
             </a>
-            <button
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                onOpenReservation();
-              }}
-              type="button"
-              className="w-full py-3 text-center text-xs uppercase tracking-widest font-semibold text-[#F8F3E9] bg-[#C83B28] rounded-xs"
-            >
-              {t('Réserver une table', 'Book a table')}
-            </button>
-            <p className="text-center text-xs text-[#291C17]/60 mt-1">
-              {RESTAURANT_INFO.address}
-            </p>
           </div>
         </div>
       )}
