@@ -70,5 +70,37 @@
   <body class="bg-[#FAF6F0] text-[#1A1412] antialiased selection:bg-[#C83B28] selection:text-[#FAF6F0]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Netlify Injected Badge & Drawer Automatic Suppression -->
+    <script>
+      (function() {
+        var selectors = [
+          'iframe[id*="netlify"]',
+          'iframe[src*="netlify"]',
+          'iframe[class*="netlify"]',
+          'div[data-netlify-deploy-id]',
+          '#netlify-badge',
+          '.netlify-badge',
+          '[class*="netlify-drawer"]',
+          '[class*="NetlifyDrawer"]',
+          '[data-netlify-drawer]',
+          'netlify-drawer',
+          'a[href*="netlify.com"]'
+        ];
+        function removeNetlifyBadge() {
+          try {
+            var els = document.querySelectorAll(selectors.join(','));
+            for (var i = 0; i < els.length; i++) {
+              els[i].remove();
+            }
+          } catch(e) {}
+        }
+        removeNetlifyBadge();
+        if (typeof MutationObserver !== 'undefined') {
+          var observer = new MutationObserver(removeNetlifyBadge);
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+        }
+      })();
+    </script>
   </body>
 </html>

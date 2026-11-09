@@ -82,8 +82,8 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
             )}
           </nav>
 
-          {/* Right-side Actions — perfectly balanced, guaranteed no overflow */}
-          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Right-side Actions — generous breathing room & balanced spacing */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5 lg:gap-4 shrink-0">
 
             {/* Language Switcher */}
             <div
@@ -94,7 +94,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               <button
                 type="button"
                 onClick={() => setLanguage('fr')}
-                className={`px-2 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
+                className={`px-2.5 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
                   language === 'fr'
                     ? 'bg-[#291C17] text-[#F8F3E9]'
                     : 'text-[#291C17]/60 hover:text-[#291C17]'
@@ -105,7 +105,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               <button
                 type="button"
                 onClick={() => setLanguage('en')}
-                className={`px-2 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
+                className={`px-2.5 py-1 text-[10px] font-bold tracking-wider transition-colors rounded-xs cursor-pointer ${
                   language === 'en'
                     ? 'bg-[#291C17] text-[#F8F3E9]'
                     : 'text-[#291C17]/60 hover:text-[#291C17]'
@@ -119,7 +119,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
             <button
               onClick={onOpenMenu}
               type="button"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs uppercase tracking-wider font-bold text-[#291C17] bg-white hover:bg-[#FAF6F0] border border-[#C83B28]/35 hover:border-[#C83B28] rounded-sm transition-all shadow-xs hover:shadow-sm cursor-pointer active:scale-95 group/mb shrink-0"
+              className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 text-xs uppercase tracking-wider font-bold text-[#291C17] bg-white hover:bg-[#FAF6F0] border border-[#C83B28]/35 hover:border-[#C83B28] rounded-sm transition-all shadow-xs hover:shadow-sm cursor-pointer active:scale-95 group/mb shrink-0"
               title={t('Consulter la carte complète', 'Open full menu')}
             >
               <UtensilsCrossed className="w-3.5 h-3.5 text-[#C83B28] group-hover/mb:rotate-12 transition-transform" />
@@ -132,7 +132,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               onClick={toggleSound}
               type="button"
               title={isAudioActive ? t('Couper la musique italienne', 'Mute Italian melody') : t('Écouter l’ambiance d’époque italienne', 'Play historic Italian music')}
-              className={`hidden md:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-sm transition-all cursor-pointer uppercase tracking-wider shrink-0 ${
+              className={`hidden md:flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-sm transition-all cursor-pointer uppercase tracking-wider shrink-0 ${
                 isAudioActive
                   ? 'bg-[#C83B28] text-white shadow-xs'
                   : 'text-[#291C17]/70 hover:text-[#291C17] bg-[#291C17]/5 hover:bg-[#291C17]/10'
@@ -151,11 +151,11 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
               )}
             </button>
 
-            {/* Book Table CTA — guaranteed completely visible without clipping */}
+            {/* Book Table CTA — generous margin and padding, no clipping */}
             <button
               onClick={onOpenReservation}
               type="button"
-              className="px-4 sm:px-5 py-2 text-xs uppercase tracking-wider font-bold text-white bg-[#C83B28] hover:bg-[#b53220] rounded-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0"
+              className="px-4.5 sm:px-5 py-2 text-xs uppercase tracking-wider font-bold text-white bg-[#C83B28] hover:bg-[#b53220] rounded-sm shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0 ml-1"
             >
               {t('Réserver une table', 'Book a Table')}
             </button>
@@ -164,7 +164,7 @@ export default function Navigation({ onOpenReservation, onOpenMenu }: Navigation
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               type="button"
-              className="lg:hidden p-1.5 text-[#291C17] hover:text-[#C83B28] transition-colors cursor-pointer shrink-0"
+              className="lg:hidden p-1.5 text-[#291C17] hover:text-[#C83B28] transition-colors cursor-pointer shrink-0 ml-1"
               aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
